@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>实时聊天</title>
+    <style>
+      #chat-container {
+        width: 400px;
+        margin: 0 auto;
+      }
+      #messages {
+        height: 300px;
+        border: 1px solid #ccc;
+        overflow-y: auto;
+        margin-bottom: 10px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chat-container">
+      <div id="messages"></div>
+      <input type="text" id="message-input" placeholder="输入消息..." />
+      <button onclick="sendMessage()">发送</button>
+    </div>
+
+    <script>
+      const ws = new WebSocket("ws://localhost:3003/chat-ws");
+      const messagesDiv = document.getElementById("messages");
+      const messageInput = document.getElementById("message-input");
+      let currentAIMessage = "";
+
+      ws.onopen = () => {
+        console.log("WebSocket 连接已建立");
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "chunk") {
+          currentAIMessage += data.content;
+          updateLastMessage("AI: " + currentAIMessage);
+        } else if (data.type === "done") {
+          console.log("AI 回复完成");
+          currentAIMessage = "";
+        } else if (data.type === "error") {
+          console.error("错误:", data.message);
+        }
+      };
+
+      ws.onclose = () => {
+        console.log("WebSocket 连接已关闭");
+      };
+
+      function sendMessage() {
+        const message = messageInput.value.trim();
+        if (message) {
+          appendMessage("你: " + message);
+          ws.send(
+            JSON.stringify({
+              messages: [{ role: "user", content: message }],
+              model: "moonshot-v1-8k",
+            })
+          );
+          messageInput.value = "";
+          appendMessage("AI: "); // 为AI回复预留位置
+        }
+      }
+
+      function appendMessage(message) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = message;
+        messagesDiv.appendChild(messageElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      function updateLastMessage(message) {
+        const lastMessage = messagesDiv.lastElementChild;
+        if (lastMessage) {
+          lastMessage.textContent = message;
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+      }
+    </script>
+  </body>
+</html>

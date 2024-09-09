@@ -1,0 +1,52 @@
+# 依赖目录
+node_modules/
+
+# 编译输出目录
+lib/
+dist/
+build/
+
+# 日志文件
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 运行时数据
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# 测试覆盖率目录
+coverage/
+
+# IDE和编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# 环境变量文件
+# .env
+.env.local
+.env.*.local
+
+# TypeScript缓存
+*.tsbuildinfo
+
+# 可选：npm包锁定文件（如果您不想将其包含在版本控制中）
+# package-lock.json
+
+# 可选：yarn包锁定文件（如果您使用yarn并且不想将其包含在版本控制中）
+# yarn.lock
+
+# 临时文件
+tmp/
+temp/
+logs/
+
+.history
+

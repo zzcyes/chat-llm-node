@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "lib": ["es2018", "esnext.asynciterable"],
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false // 添加这一行来关闭不能使用 any 的限制
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
